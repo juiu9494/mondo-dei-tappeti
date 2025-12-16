@@ -1,16 +1,1202 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <style> 
-        body { 
-            background-color: black; 
+    <title>LA CASA DELL'ORRORE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial Black', 'Arial', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Cursore personalizzato */
+        .cursore-sangue {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ff0000 0%, #8b0000 70%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            filter: blur(1px);
+            animation: pulsazione-cursore 0.5s infinite alternate;
+        }
+        
+        @keyframes pulsazione-cursore {
+            from { transform: scale(1); opacity: 0.9; }
+            to { transform: scale(1.2); opacity: 1; }
+        }
+        
+        /* Schermata iniziale */
+        .avvertimento-iniziale {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #ff0000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .avvertimento-testo {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #ff0000;
+            animation: lampeggio 1s infinite;
+            letter-spacing: 5px;
+        }
+        
+        .avvertimento-sottotitolo {
+            font-size: 1.8rem;
+            margin-bottom: 50px;
+            color: #ff6666;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+        
+        .pulsante-inizia {
+            background-color: #8b0000;
+            color: white;
+            border: 3px solid #ff0000;
+            padding: 20px 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+        }
+        
+        .pulsante-inizia:hover {
+            background-color: #ff0000;
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.9);
+        }
+        
+        @keyframes lampeggio {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Effetti di background */
+        .sfondo-incubo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 0, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(255, 69, 0, 0.1) 0%, transparent 40%);
+            z-index: 1;
+        }
+        
+        .effetto-statico {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><rect width="100" height="100" fill="black"/><circle cx="50" cy="50" r="40" fill="white"/></svg>');
+            opacity: 0.1;
+            animation: statica 0.05s infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        @keyframes statica {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; }
+        }
+        
+        .sangue-che-cola {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+        
+        .goccia {
+            position: absolute;
+            width: 5px;
+            height: 0;
+            background: linear-gradient(to bottom, rgba(139, 0, 0, 0) 0%, #8b0000 50%, #ff0000 100%);
+            animation: colare 8s infinite;
+            filter: blur(1px);
+        }
+        
+        @keyframes colare {
+            0% { height: 0; top: -100px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { height: 150px; top: 100vh; opacity: 0; }
+        }
+        
+        /* Testi spaventosi */
+        .messaggio-spaventoso {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-align: center;
+            text-shadow: 0 0 30px #ff0000;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 2s;
+            white-space: nowrap;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+        
+        .messaggio-ombra {
+            position: fixed;
+            color: rgba(255, 0, 0, 0.1);
+            font-size: 1.5rem;
+            z-index: 5;
+            animation: fluttuare 20s infinite linear;
+        }
+        
+        @keyframes fluttuare {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Figure spaventose */
+        .figura-spaventosa {
+            position: fixed;
+            width: 300px;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            z-index: 15;
+            transition: opacity 0.5s;
+            filter: brightness(0.8) contrast(1.2);
+            display: none;
+        }
+        
+        /* Specchio rotto */
+        .specchio {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 500px;
+            border: 10px solid #8b0000;
+            background-color: #333;
+            z-index: 25;
+            display: none;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+            overflow: hidden;
+        }
+        
+        .riflesso {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        /* Jumpscare finale */
+        .jumpscare-finale {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .immagine-jumpscare {
+            max-width: 90%;
+            max-height: 90%;
+            filter: brightness(1.5) contrast(1.3);
+            animation: scuotimento 0.1s infinite;
+        }
+        
+        @keyframes scuotimento {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(5px, 5px); }
+            50% { transform: translate(-5px, -5px); }
+            75% { transform: translate(-5px, 5px); }
+        }
+        
+        /* Porte */
+        .porta {
+            position: fixed;
+            width: 200px;
+            height: 300px;
+            background-color: #8b0000;
+            border: 5px solid #330000;
+            z-index: 30;
+            cursor: pointer;
+            transition: transform 1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+        
+        .porta:hover {
+            background-color: #ff0000;
+        }
+        
+        /* Orologio */
+        .orologio {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            color: #ff0000;
+            z-index: 50;
+            text-shadow: 0 0 20px #ff0000;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* Controlli audio */
+        .controlli-audio {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .pulsante-audio {
+            background-color: rgba(139, 0, 0, 0.8);
+            color: white;
+            border: 2px solid #ff0000;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pulsante-audio:hover {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+        
+        /* Luci lampeggianti */
+        .luce-lampeggiante {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Effetto respiro */
+        .effetto-respiro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.05);
+            animation: respirare 5s infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes respirare {
+            0%, 100% { opacity: 0.05; }
+            50% { opacity: 0.2; }
+        }
+        
+        /* Numeri che compaiono */
+        .numero-maledetto {
+            position: fixed;
+            font-size: 10rem;
+            color: rgba(255, 0, 0, 0.1);
+            z-index: 5;
+            animation: apparire-numero 10s infinite;
+        }
+        
+        @keyframes apparire-numero {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.3; transform: scale(1); }
+        }
+        
+        /* Telefono che squilla */
+        .telefono {
+            position: fixed;
+            bottom: 100px;
+            left: 100px;
+            width: 100px;
+            height: 150px;
+            background-color: #222;
+            border-radius: 10px;
+            z-index: 35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
+            font-size: 3rem;
+            animation: vibrare 0.2s infinite;
+            cursor: pointer;
+            display: none;
+        }
+        
+        @keyframes vibrare {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Piangendo */
+        .pianto-sangue {
+            position: fixed;
+            width: 50px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255, 0, 0, 0) 0%, #ff0000 100%);
+            border-radius: 0 0 25px 25px;
+            animation: piangere 3s infinite;
+            z-index: 10;
+            filter: blur(2px);
+            display: none;
+        }
+        
+        @keyframes piangere {
+            0%, 100% { opacity: 0; transform: translateY(-50px); }
+            50% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Volume warning */
+        .avviso-volume {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            font-size: 1.2rem;
+            max-width: 300px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .avvertimento-testo {
+                font-size: 2.5rem;
+            }
             
+            .avvertimento-sottotitolo {
+                font-size: 1.3rem;
+            }
+            
+            .messaggio-spaventoso {
+                font-size: 2rem;
+            }
+            
+            .porta {
+                width: 150px;
+                height: 250px;
+            }
+            
+            .specchio {
+                width: 300px;
+                height: 400px;
+            }
         }
     </style>
+</head>
+<body>
+    <!-- Schermata iniziale di avvertimento -->
+    <div class="avvertimento-iniziale" id="avvertimentoIniziale">
+        <div class="avvertimento-testo">⚠ AVVERTIMENTO ESTREMO ⚠</div>
+        <div class="avvertimento-sottotitolo">
+            QUESTA PAGINA CONTIENE SUONI FORTISSIMI, IMMAGINI ESTREMAMENTE SPAVENTOSE 
+            E EFFETTI PSICOLOGICI INTENSI. NON ENTRARE SE HAI PROBLEMI CARDIACI, 
+            EPILESSIA O SEI FACILMENTE SPAVENTABILE. L'ESPERIENZA È VOLUTAMENTE 
+            TRAUMATIZZANTE.
+        </div>
+        <div class="avvertimento-sottotitolo" style="color: #ff6666; margin-top: 20px;">
+            Volume consigliato: AL MASSIMO. Ambiente: COMPLETAMENTE AL BUIO.
+        </div>
+        <button class="pulsante-inizia" id="pulsanteInizia">
+            ENTRARE NELL'INCUBO
+        </button>
+        <div class="avvertimento-sottotitolo" style="margin-top: 50px; font-size: 1.2rem; color: #888;">
+            Non possiamo essere ritenuti responsabili per eventuali danni psicologici
+        </div>
+    </div>
+    
+    <!-- Cursore personalizzato -->
+    <div class="cursore-sangue" id="cursoreSangue"></div>
+    
+    <!-- Elementi dell'incubo -->
+    <div class="sfondo-incubo"></div>
+    <div class="effetto-statico"></div>
+    <div class="effetto-respiro"></div>
+    <div class="sangue-che-cola" id="sangueCheCola"></div>
+    
+    <!-- Messaggi spaventosi -->
+    <div class="messaggio-spaventoso" id="messaggioSpaventoso"></div>
+    
+    <!-- Figure spaventose -->
+    <div class="figura-spaventosa" id="figura1" style="background-image: url('https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
+    <div class="figura-spaventosa" id="figura2" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
+    
+    <!-- Specchio -->
+    <div class="specchio" id="specchio">
+        <div class="riflesso" id="riflesso">
+            SEI TU... MA DIVERSA
+        </div>
+    </div>
+    
+    <!-- Porte -->
+    <div class="porta" id="porta1" style="top: 30%; left: 10%;">
+        NON APRIRE<br>È DENTRO
+    </div>
+    <div class="porta" id="porta2" style="top: 30%; right: 10%;">
+        APRIMI<br>VOGLIO USCIRE
+    </div>
+    <div class="porta" id="porta3" style="bottom: 20%; left: 20%;">
+        AIUTAMI<br>SONO QUI
+    </div>
+    
+    <!-- Orologio -->
+    <div class="orologio" id="orologio">00:00</div>
+    
+    <!-- Jumpscare finale -->
+    <div class="jumpscare-finale" id="jumpscareFinale">
+        <img src="https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" class="immagine-jumpscare" alt="">
+    </div>
+    
+    <!-- Luci lampeggianti -->
+    <div class="luce-lampeggiante" id="luceLampeggiante"></div>
+    
+    <!-- Telefono -->
+    <div class="telefono" id="telefono">
+        <i class="fas fa-phone"></i>
+    </div>
+    
+    <!-- Piangendo -->
+    <div class="pianto-sangue" id="pianto1" style="top: 100px; left: 200px;"></div>
+    <div class="pianto-sangue" id="pianto2" style="top: 150px; right: 300px;"></div>
+    
+    <!-- Avviso volume -->
+    <div class="avviso-volume" id="avvisoVolume">
+        ⚠ ATTENZIONE: SUONI MOLTO FORTI! ⚠<br>
+        Abbassa il volume se necessario.
+    </div>
+    
+    <!-- Controlli audio -->
+    <div class="controlli-audio">
+        <button class="pulsante-audio" id="pulsanteAudio">
+            <i class="fas fa-volume-up"></i> SUONI ATTIVI
+        </button>
+        <button class="pulsante-audio" id="pulsanteEsci">
+            <i class="fas fa-door-open"></i> USCITA D'EMERGENZA
+        </button>
+    </div>
+
+    <!-- Audio files - Suoni FORTISSIMI e spaventosi -->
+    <audio id="audioAmbiente" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-horror-ambience-492.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioUrloLungo">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-woman-scream-392.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioPorta">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-creepy-door-opening-256.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioRisata">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-evil-laugh-502.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioSussurro">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-creepy-whisper-220.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioBattito">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-slow-heartbeat-493.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioJumpscare">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-horror-lose-2026.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioTelefono">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-telephone-ring-449.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioPioggia">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-rain-and-thunder-storm-2390.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioUrloImprovviso">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-horror-scream-493.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioPassi">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-footsteps-on-wooden-floor-387.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioPortaSbatte">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-door-horror-knock-387.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="audioCampane">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-bell-of-horror-576.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Variabili globali
+        let esperienzaIniziata = false;
+        let audioAttivo = true;
+        let volumeMassimo = true;
+        let timerIncubo;
+        let timerMessaggi;
+        let timerEventi;
+        let contatorePorte = 0;
+        let mouseX = 0, mouseY = 0;
+        let orologioMostrato = false;
+        
+        // Elementi DOM
+        const avvertimentoIniziale = document.getElementById('avvertimentoIniziale');
+        const pulsanteInizia = document.getElementById('pulsanteInizia');
+        const cursoreSangue = document.getElementById('cursoreSangue');
+        const sangueCheCola = document.getElementById('sangueCheCola');
+        const messaggioSpaventoso = document.getElementById('messaggioSpaventoso');
+        const figura1 = document.getElementById('figura1');
+        const figura2 = document.getElementById('figura2');
+        const specchio = document.getElementById('specchio');
+        const riflesso = document.getElementById('riflesso');
+        const porta1 = document.getElementById('porta1');
+        const porta2 = document.getElementById('porta2');
+        const porta3 = document.getElementById('porta3');
+        const orologio = document.getElementById('orologio');
+        const jumpscareFinale = document.getElementById('jumpscareFinale');
+        const luceLampeggiante = document.getElementById('luceLampeggiante');
+        const telefono = document.getElementById('telefono');
+        const pianto1 = document.getElementById('pianto1');
+        const pianto2 = document.getElementById('pianto2');
+        const avvisoVolume = document.getElementById('avvisoVolume');
+        const pulsanteAudio = document.getElementById('pulsanteAudio');
+        const pulsanteEsci = document.getElementById('pulsanteEsci');
+        
+        // Elementi audio
+        const audioAmbiente = document.getElementById('audioAmbiente');
+        const audioUrloLungo = document.getElementById('audioUrloLungo');
+        const audioPorta = document.getElementById('audioPorta');
+        const audioRisata = document.getElementById('audioRisata');
+        const audioSussurro = document.getElementById('audioSussurro');
+        const audioBattito = document.getElementById('audioBattito');
+        const audioJumpscare = document.getElementById('audioJumpscare');
+        const audioTelefono = document.getElementById('audioTelefono');
+        const audioPioggia = document.getElementById('audioPioggia');
+        const audioUrloImprovviso = document.getElementById('audioUrloImprovviso');
+        const audioPassi = document.getElementById('audioPassi');
+        const audioPortaSbatte = document.getElementById('audioPortaSbatte');
+        const audioCampane = document.getElementById('audioCampane');
+        
+        // Messaggi spaventosi in italiano
+        const messaggiSpaventosi = [
+            "NON SEI SOLA IN QUESTA STANZA",
+            "GUARDA ALLA TUA SINISTRA",
+            "SENTO IL TUO RESPIRO",
+            "NON FIDARTI DELLO SPECCHIO",
+            "STANNO VENENDO A PRENDERTI",
+            "LA PORTA SI STA APRENDO",
+            "TI TROVO... TI TROVO...",
+            "NON PUOI SCAPPARE",
+            "SONO QUI DA SEMPRE",
+            "GUARDA DIETRO DI TE",
+            "IL TELEFONO STA SQUILLANDO",
+            "NON È LA TUA CASA",
+            "LE PARETI SANGUINANO",
+            "IL TEMPO STA FINENDO",
+            "QUESTA NON È UNA DIMOSTRAZIONE",
+            "STAI MOREANDO",
+            "NON ESISTE USCITA",
+            "TI VEDO NEL BUIO",
+            "IL TUO RIFLESSO È DIVERSA",
+            "NON È UN INCUBO... È REALTÀ"
+        ];
+        
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostra avviso volume
+            setTimeout(() => {
+                avvisoVolume.style.display = 'block';
+                setTimeout(() => {
+                    avvisoVolume.style.display = 'none';
+                }, 5000);
+            }, 1000);
+            
+            // Imposta volume massimo
+            if (volumeMassimo) {
+                setVolumeMassimo();
+            }
+            
+            // Crea gocce di sangue
+            creaGocceSangue();
+            
+            // Crea messaggi ombra
+            creaMessaggiOmbra();
+            
+            // Crea numeri maledetti
+            creaNumeriMaledetti();
+            
+            // Imposta event listeners
+            setupEventListeners();
+            
+            // Aggiorna cursore
+            document.addEventListener('mousemove', aggiornaCursore);
+            
+            // Aggiorna orologio
+            aggiornaOrologio();
+            setInterval(aggiornaOrologio, 1000);
+        });
+        
+        // Funzione per iniziare l'incubo
+        pulsanteInizia.addEventListener('click', function() {
+            avvertimentoIniziale.style.display = 'none';
+            esperienzaIniziata = true;
+            
+            // Inizia l'audio
+            if (audioAttivo) {
+                avviaAudio();
+            }
+            
+            // Inizia la sequenza dell'incubo
+            iniziaIncubo();
+        });
+        
+        // Imposta volume massimo
+        function setVolumeMassimo() {
+            const elementiAudio = [
+                audioAmbiente, audioUrloLungo, audioPorta, audioRisata,
+                audioSussurro, audioBattito, audioJumpscare, audioTelefono,
+                audioPioggia, audioUrloImprovviso, audioPassi, audioPortaSbatte,
+                audioCampane
+            ];
+            
+            elementiAudio.forEach(audio => {
+                audio.volume = 1.0;
+            });
+        }
+        
+        // Crea gocce di sangue
+        function creaGocceSangue() {
+            for (let i = 0; i < 30; i++) {
+                const goccia = document.createElement('div');
+                goccia.className = 'goccia';
+                goccia.style.left = `${Math.random() * 100}%`;
+                goccia.style.animationDelay = `${Math.random() * 10}s`;
+                sangueCheCola.appendChild(goccia);
+            }
+        }
+        
+        // Crea messaggi ombra
+        function creaMessaggiOmbra() {
+            const testiOmbra = [
+                "AIUTO", "DOLORE", "MUORI", "SOFFRI", "PASSI", "SANGUE",
+                "OSCURITÀ", "DEMONE", "SPIRITO", "MORTE", "PIANTO", "URLA",
+                "TORMENTO", "INFERNO", "POSSESSIONE", "ORRORE", "TORTURA"
+            ];
+            
+            for (let i = 0; i < 20; i++) {
+                const messaggio = document.createElement('div');
+                messaggio.className = 'messaggio-ombra';
+                messaggio.textContent = testiOmbra[Math.floor(Math.random() * testiOmbra.length)];
+                messaggio.style.left = `${Math.random() * 100}%`;
+                messaggio.style.top = `${Math.random() * 100}%`;
+                messaggio.style.animationDelay = `${Math.random() * 20}s`;
+                document.body.appendChild(messaggio);
+            }
+        }
+        
+        // Crea numeri maledetti
+        function creaNumeriMaledetti() {
+            for (let i = 0; i < 10; i++) {
+                const numero = document.createElement('div');
+                numero.className = 'numero-maledetto';
+                numero.textContent = Math.floor(Math.random() * 666);
+                numero.style.left = `${Math.random() * 90}%`;
+                numero.style.top = `${Math.random() * 90}%`;
+                numero.style.animationDelay = `${Math.random() * 10}s`;
+                document.body.appendChild(numero);
+            }
+        }
+        
+        // Imposta event listeners
+        function setupEventListeners() {
+            // Porte
+            porta1.addEventListener('click', () => apriPorta(1));
+            porta2.addEventListener('click', () => apriPorta(2));
+            porta3.addEventListener('click', () => apriPorta(3));
+            
+            // Specchio
+            specchio.addEventListener('click', () => {
+                specchio.style.display = 'none';
+                if (audioAttivo) {
+                    audioUrloImprovviso.currentTime = 0;
+                    audioUrloImprovviso.play();
+                }
+                mostraMessaggio("IL TUO RIFLESSO È VIVO");
+                lampo();
+            });
+            
+            // Telefono
+            telefono.addEventListener('click', () => {
+                telefono.style.display = 'none';
+                if (audioAttivo) {
+                    audioTelefono.pause();
+                    audioSussurro.currentTime = 0;
+                    audioSussurro.play();
+                }
+                mostraMessaggio("NON RISPONDERE MAI... È TROPPO TARDI");
+            });
+            
+            // Controlli audio
+            pulsanteAudio.addEventListener('click', toggleAudio);
+            pulsanteEsci.addEventListener('click', uscitaEmergenza);
+            
+            // Tasti
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    mostraMessaggio("NON C'È SCAMPATO");
+                }
+                
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    mostraMessaggio("NON CERCARE DI MODIFICARE IL DESTINO");
+                }
+                
+                // Combinaizione segreta per jumpscare immediato
+                if (e.ctrlKey && e.altKey && e.key === 'J') {
+                    attivaJumpscare();
+                }
+            });
+            
+            // Movimento mouse casuale
+            document.addEventListener('mousemove', function(e) {
+                if (Math.random() > 0.98 && esperienzaIniziata) {
+                    effettoCasuale();
+                }
+            });
+            
+            // Tentativo di uscire
+            window.addEventListener('beforeunload', function(e) {
+                if (esperienzaIniziata) {
+                    e.preventDefault();
+                    e.returnValue = 'SEI SICURO DI VOLER ABBANDONARE? TORNERANNO A TROVARTI...';
+                }
+            });
+        }
+        
+        // Aggiorna cursore
+        function aggiornaCursore(e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursoreSangue.style.left = `${mouseX - 15}px`;
+            cursoreSangue.style.top = `${mouseY - 15}px`;
+        }
+        
+        // Aggiorna orologio
+        function aggiornaOrologio() {
+            if (!orologioMostrato && esperienzaIniziata) {
+                orologio.style.display = 'block';
+                orologioMostrato = true;
+            }
+            
+            const ora = new Date();
+            let ore = ora.getHours();
+            let minuti = ora.getMinutes();
+            
+            // Orario sempre spaventoso
+            if (Math.random() > 0.5) {
+                ore = 3;
+                minuti = 33;
+            }
+            
+            ore = ore < 10 ? '0' + ore : ore;
+            minuti = minuti < 10 ? '0' + minuti : minuti;
+            
+            orologio.textContent = `${ore}:${minuti}`;
+            
+            // A mezzanotte effetto speciale
+            if (ora.getHours() === 0 && ora.getMinutes() === 0) {
+                mostraMessaggio("È L'ORA DEI MORTI");
+                if (audioAttivo) {
+                    audioCampane.currentTime = 0;
+                    audioCampane.play();
+                }
+            }
+        }
+        
+        // Avvia audio
+        function avviaAudio() {
+            audioAmbiente.play();
+            audioBattito.play();
+            audioPioggia.play();
+            
+            // Suoni casuali
+            setTimeout(() => {
+                if (audioAttivo) {
+                    audioPassi.currentTime = 0;
+                    audioPassi.play();
+                }
+            }, 5000);
+        }
+        
+        // Inizia incubo
+        function iniziaIncubo() {
+            // Mostra primo messaggio
+            setTimeout(() => {
+                mostraMessaggio("BENVENUTA NELLA TUA NUOVA CASA");
+            }, 2000);
+            
+            // Timer per messaggi
+            timerMessaggi = setInterval(() => {
+                if (esperienzaIniziata) {
+                    const messaggioCasuale = messaggiSpaventosi[Math.floor(Math.random() * messaggiSpaventosi.length)];
+                    mostraMessaggio(messaggioCasuale);
+                }
+            }, 10000);
+            
+            // Timer per eventi casuali
+            timerEventi = setInterval(() => {
+                if (esperienzaIniziata) {
+                    effettoCasuale();
+                }
+            }, 15000);
+            
+            // Timer per incubo finale
+            timerIncubo = setTimeout(() => {
+                attivaJumpscare();
+            }, 120000); // 2 minuti
+            
+            // Mostra figure dopo 30 secondi
+            setTimeout(() => {
+                mostraFigura(figura1, 3000);
+                setTimeout(() => {
+                    mostraFigura(figura2, 3000);
+                }, 10000);
+            }, 30000);
+            
+            // Telefono che squilla dopo 45 secondi
+            setTimeout(() => {
+                telefono.style.display = 'flex';
+                if (audioAttivo) {
+                    audioTelefono.currentTime = 0;
+                    audioTelefono.play();
+                }
+            }, 45000);
+            
+            // Specchio dopo 60 secondi
+            setTimeout(() => {
+                specchio.style.display = 'block';
+            }, 60000);
+            
+            // Piangendo sangue dopo 75 secondi
+            setTimeout(() => {
+                pianto1.style.display = 'block';
+                pianto2.style.display = 'block';
+            }, 75000);
+        }
+        
+        // Mostra messaggio
+        function mostraMessaggio(testo) {
+            messaggioSpaventoso.textContent = testo;
+            messaggioSpaventoso.style.opacity = '1';
+            
+            // Suono sussurro
+            if (audioAttivo && Math.random() > 0.5) {
+                audioSussurro.currentTime = 0;
+                audioSussurro.play();
+            }
+            
+            setTimeout(() => {
+                messaggioSpaventoso.style.opacity = '0';
+            }, 3000);
+        }
+        
+        // Mostra figura
+        function mostraFigura(figura, durata) {
+            const x = Math.random() * 70;
+            const y = Math.random() * 70;
+            figura.style.left = `${x}%`;
+            figura.style.top = `${y}%`;
+            figura.style.display = 'block';
+            figura.style.opacity = '1';
+            
+            // Urlo
+            if (audioAttivo) {
+                audioUrloImprovviso.currentTime = 0;
+                audioUrloImprovviso.play();
+            }
+            
+            // Lampo
+            lampo();
+            
+            setTimeout(() => {
+                figura.style.opacity = '0';
+                setTimeout(() => {
+                    figura.style.display = 'none';
+                }, 500);
+            }, durata);
+        }
+        
+        // Apri porta
+        function apriPorta(numero) {
+            contatorePorte++;
+            
+            // Suono porta
+            if (audioAttivo) {
+                audioPorta.currentTime = 0;
+                audioPorta.play();
+                
+                setTimeout(() => {
+                    audioPortaSbatte.currentTime = 0;
+                    audioPortaSbatte.play();
+                }, 1000);
+            }
+            
+            // Effetto visivo
+            lampo();
+            
+            // Messaggio
+            if (numero === 1) {
+                mostraMessaggio("DOVEVO AVVERTIRTI... È USCITO");
+            } else if (numero === 2) {
+                mostraMessaggio("NON DOVEVI APRIRLA... ADESSO È LIBERA");
+            } else if (numero === 3) {
+                mostraMessaggio("È ENTRATA... È NELLA TUA STANZA");
+            }
+            
+            // Dopo 3 porte, jumpscare
+            if (contatorePorte >= 3) {
+                setTimeout(() => {
+                    attivaJumpscare();
+                }, 2000);
+            }
+        }
+        
+        // Effetto casuale
+        function effettoCasuale() {
+            const effetti = [
+                () => {
+                    // Urlo improvviso
+                    if (audioAttivo) {
+                        audioUrloLungo.currentTime = 0;
+                        audioUrloLungo.play();
+                    }
+                    lampo();
+                },
+                () => {
+                    // Risata malvagia
+                    if (audioAttivo) {
+                        audioRisata.currentTime = 0;
+                        audioRisata.play();
+                    }
+                    mostraMessaggio("RIDO DELLA TUA PAURA");
+                },
+                () => {
+                    // Battito accelerato
+                    if (audioAttivo) {
+                        audioBattito.playbackRate = 2.0;
+                        setTimeout(() => {
+                            audioBattito.playbackRate = 1.0;
+                        }, 3000);
+                    }
+                },
+                () => {
+                    // Cambio colore schermo
+                    document.body.style.backgroundColor = '#330000';
+                    setTimeout(() => {
+                        document.body.style.backgroundColor = '#000';
+                    }, 500);
+                },
+                () => {
+                    // Vibrazione (se supportata)
+                    if (navigator.vibrate) {
+                        navigator.vibrate([500, 200, 500]);
+                    }
+                }
+            ];
+            
+            const effettoCasuale = effetti[Math.floor(Math.random() * effetti.length)];
+            effettoCasuale();
+        }
+        
+        // Lampo di luce
+        function lampo() {
+            luceLampeggiante.style.opacity = '0.8';
+            setTimeout(() => {
+                luceLampeggiante.style.opacity = '0';
+            }, 100);
+        }
+        
+        // Attiva jumpscare
+        function attivaJumpscare() {
+            esperienzaIniziata = false;
+            
+            // Ferma tutti i timer
+            clearInterval(timerMessaggi);
+            clearInterval(timerEventi);
+            clearTimeout(timerIncubo);
+            
+            // Suono jumpscare
+            if (audioAttivo) {
+                // Ferma tutti gli altri suoni
+                const tuttiAudio = [
+                    audioAmbiente, audioUrloLungo, audioPorta, audioRisata,
+                    audioSussurro, audioBattito, audioTelefono, audioPioggia,
+                    audioUrloImprovviso, audioPassi, audioPortaSbatte, audioCampane
+                ];
+                
+                tuttiAudio.forEach(audio => audio.pause());
+                
+                // Suono jumpscare a volume massimo
+                audioJumpscare.volume = 1.0;
+                audioJumpscare.currentTime = 0;
+                audioJumpscare.play();
+            }
+            
+            // Mostra jumpscare
+            jumpscareFinale.style.display = 'flex';
+            
+            // Lampeggia violentemente
+            let lampeggi = 0;
+            const intervalloLampeggio = setInterval(() => {
+                lampo();
+                lampeggi++;
+                
+                if (lampeggi > 10) {
+                    clearInterval(intervalloLampeggio);
+                    
+                    // Nascondi dopo 3 secondi
+                    setTimeout(() => {
+                        jumpscareFinale.style.display = 'none';
+                        
+                        // Mostra messaggio finale
+                        setTimeout(() => {
+                            mostraMessaggio("TORNERANNO A TROVARTI... STANNO ARRIVANDO...");
+                            document.body.style.backgroundColor = '#000';
+                        }, 1000);
+                    }, 3000);
+                }
+            }, 200);
+        }
+        
+        // Toggle audio
+        function toggleAudio() {
+            audioAttivo = !audioAttivo;
+            
+            if (audioAttivo) {
+                pulsanteAudio.innerHTML = '<i class="fas fa-volume-up"></i> SUONI ATTIVI';
+                avviaAudio();
+            } else {
+                pulsanteAudio.innerHTML = '<i class="fas fa-volume-mute"></i> SUONI DISATTIVATI';
+                
+                // Ferma tutti gli audio
+                const tuttiAudio = [
+                    audioAmbiente, audioUrloLungo, audioPorta, audioRisata,
+                    audioSussurro, audioBattito, audioJumpscare, audioTelefono,
+                    audioPioggia, audioUrloImprovviso, audioPassi, audioPortaSbatte,
+                    audioCampane
+                ];
+                
+                tuttiAudio.forEach(audio => audio.pause());
+            }
+        }
+        
+        // Uscita d'emergenza
+        function uscitaEmergenza() {
+            if (esperienzaIniziata) {
+                if (confirm("SEI SICURA DI VOLER USCIRE? NON SARAI MAI AL SICURO...")) {
+                    // Messaggio finale
+                    mostraMessaggio("SCAPPERAI MAI VERAMENTE?");
+                    
+                    // Chiudi dopo 3 secondi
+                    setTimeout(() => {
+                        window.close();
+                    }, 3000);
+                }
+            }
+        }
+        
+        // Controlla se è notte
+        function isNight() {
+            const ora = new Date().getHours();
+            return ora >= 22 || ora <= 6;
+        }
+        
+        // Messaggio se è notte
+        if (isNight()) {
+            setTimeout(() => {
+                if (esperienzaIniziata) {
+                    mostraMessaggio("DI NOTTE SONO PIÙ FORTI... STANNO ARRIVANDO");
+                }
+            }, 30000);
+        }
+    </script>
 </body>
 </html>
